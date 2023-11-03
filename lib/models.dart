@@ -1,22 +1,21 @@
 import 'package:uuid/uuid.dart';
 
-// user.dart
-// class User {
-//   String id;
-//   final String userName;
-//   final String password;
-//   final String email;
-//   final BigInt phoneNumber;
-//   final String role;
+class User {
+  String id;
+  String userName;
+  String password; // Hashed and salted password
+  final String email;
+  final String phoneNumber; // Use a string for phone numbers
+  final String role;
 
-//   User({
-//     required this.userName,
-//     required this.password,
-//     this.email = "",
-//     this.phoneNumber = BigInt.from(1),
-//     required this.role,
-//   }) : id = Uuid().v4();
-// }
+  User({
+    required this.userName,
+    required this.password,
+    this.email = "",
+    this.phoneNumber = "",
+    this.role = "user",
+  }) : id = Uuid().v4();
+}
 
 class Product {
   String id;

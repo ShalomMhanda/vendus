@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vendus/app_theme.dart';
 import 'package:vendus/main_screens.dart';
+import "package:vendus/registration_screen.dart";
 
 void main() {
   runApp(MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'vendus',
         theme: myTheme,
-        home: MyHomePage(),
+        home: RegistrationForm(),
         routes: {
           '/home': (context) => MyHomePage(),
           '/search': (context) => SearchPage(),
