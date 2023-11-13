@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vendus/app_theme.dart';
 import 'package:vendus/models/user.dart';
 import 'package:vendus/database/database_helper.dart';
-
-import 'login_screen.dart';
+import 'package:vendus/screens/login_screen.dart';
 
 class RegistrationForm extends StatefulWidget {
   @override
@@ -104,7 +103,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(builder: (context) => LoginForm()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -151,7 +150,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LoginPage()),
+                                    builder: (context) => LoginForm()),
                               );
                             } catch (e) {
                               print('Error inserting user: $e');

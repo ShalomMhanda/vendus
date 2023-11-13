@@ -73,5 +73,26 @@ class DatabaseHelper {
     String path = join(databasesPath, 'vendus_database.db');
     print(path);
   }
+
+  //   Future<Database> _initializeDatabase() async {
+//     final String path = join(await getDatabasesPath(), 'users.db');
+//     return await openDatabase(path, version: 1, onCreate: (db, version) {
+//       db.execute('''
+//         CREATE TABLE users(
+//           id INTEGER PRIMARY KEY,
+//           username TEXT,
+//           password TEXT
+//         )
+//       ''');
+//     });
+//   }
+
+  Future<bool> loginUser(String username, String password) async {
+    final db = await database;
+    final result = await db.rawQuery(
+      'SELECT * FROM users WHERE username = ? AND password = ?',
+      [username, password]);
+    return result.isNotEmpty;
+  }
   
 }
