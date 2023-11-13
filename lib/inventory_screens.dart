@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vendus/main.dart';
 import 'package:vendus/app_theme.dart';
 import 'package:vendus/main_screens.dart';
-import 'package:vendus/models.dart';
+import 'package:vendus/models/product.dart';
 
 class ProductForm extends StatefulWidget {
   @override

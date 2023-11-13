@@ -17,6 +17,7 @@ dependencies:
   uuid: ^3.0.4
   sqflite: ^2.3.0
   path: ^1.8.3
+  moor: ^4.6.1+1
 
 
 dev_dependencies:
