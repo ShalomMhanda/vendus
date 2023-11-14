@@ -25,7 +25,7 @@ class DatabaseHelper {
   Future<Database> initializeDatabase() async {
     final String path = join(await getDatabasesPath(), 'vendus_database.db');
     print(getDatabasesPath());
-    return await openDatabase(path, version: 1, onCreate: _createDatabase);
+    return await openDatabase(path, version: 2, onCreate: _createDatabase);
   }
 
   Future<void> _createDatabase(Database db, int version) async {
@@ -131,5 +131,36 @@ class DatabaseHelper {
     // }
 
     // return false;
+  }
+
+  // Future<List<Product>> getProducts() async {
+  //   final db = await database;
+  //   final result = await db.query('products');
+  //   final productIds = result.map((json) => Product.fromMap(json).id).toList();
+  //   print('Product IDs in the database: $productIds');
+  //   return result.map((json) => Product.fromMap(json)).toList();
+  // }
+
+  Future<List<Product>> getProducts() async {
+    final db = await database;
+    final result = await db.query('products');
+    final products = result.map((json) => Product.fromMap(json)).toList();
+
+    // Print the product IDs retrieved from the database
+    final productIds = products.map((product) => product.id).toList();
+    print('Product IDs in the database: $productIds');
+
+    return products;
+  }
+
+  Future<void> deleteProduct(String id) async {
+    try {
+      final db = await database;
+      print('Deleting product with ID: $id');
+      await db.delete('products', where: 'id = ?', whereArgs: [id]);
+      print('Product deleted successfully');
+    } catch (e) {
+      print('Error deleting product: $e');
+    }
   }
 }

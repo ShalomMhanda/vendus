@@ -6,6 +6,7 @@ import 'package:vendus/app_theme.dart';
 import 'package:vendus/screens/inventory_screens.dart';
 import 'package:vendus/sales_screens.dart';
 import 'package:vendus/expense_screens.dart';
+import 'package:vendus/screens/product_list.dart';
 
 class MyHomePage extends StatelessWidget {
   @override
@@ -232,7 +233,7 @@ class InventoryManagementPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ViewInventoryPage()),
+                                builder: (context) => ProductListPage()),
                           );
                         },
                       ),

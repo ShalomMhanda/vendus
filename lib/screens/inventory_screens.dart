@@ -184,6 +184,7 @@ class _ProductFormState extends State<ProductForm> {
 
                           print('bcsdbcsdcbsdcnscsdjhcsdh');
                           print(product.productName);
+                          print(product.id);
 
                           // Display success message
                           _showSnackBar('Product added successfully');
@@ -210,55 +211,7 @@ class _ProductFormState extends State<ProductForm> {
                     ),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: myTheme.colorScheme.primary),
-                  )
-
-                  // child: ElevatedButton.icon(
-                  //   onPressed: () async {
-                  //     if (_formKey.currentState!.validate()) {
-                  //       await dbHelper.printDatabasePath();
-
-                  //       try {
-                  //         // Save user to the database
-                  //         print('Before trying to save');
-                  //         await dbHelper.insertProduct(_product);
-                  //         print('After trying to save');
-                  //         // Display success message
-                  //         _showSnackBar('Product added successfully');
-                  //         // ignore: use_build_context_synchronously
-                  //         Navigator.pushReplacement(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //               builder: (context) => MyHomePage()),
-                  //         );
-                  //       } catch (e) {
-                  //         _showSnackBar('Product was not added successfully');
-                  //         print('Error inserting user: $e');
-                  //       }
-                  //       // Process data.
-                  //       // _formKey.currentState!.save();
-                  //       // // Store form data in Product object.
-                  //       // Product product = Product(
-                  //       //   productName: _product.productName,
-                  //       //   unitOfMeasurement: _product.unitOfMeasurement,
-                  //       //   quantity: _product.quantity,
-                  //       //   cost: _product.cost,
-                  //       //   dateOfPurchase: _product.dateOfPurchase,
-                  //       //   description: _product.description,
-                  //       // );
-                  //       // print(product);
-                  //     }
-                  //   },
-                  //   icon: Icon(Icons.save),
-                  //   label: Text(
-                  //     'Save Product',
-                  //     style: TextStyle(
-                  //         color: myTheme.colorScheme.onPrimary, fontSize: 20),
-                  //     textAlign: TextAlign.center,
-                  //   ),
-                  //   style: ElevatedButton.styleFrom(
-                  //       backgroundColor: myTheme.colorScheme.primary),
-                  // )
-                  ),
+                  )),
             ],
           ),
         ),
