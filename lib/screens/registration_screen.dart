@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vendus/app_theme.dart';
+import 'package:vendus/database/auth_service.dart';
 import 'package:vendus/models/user.dart';
 import 'package:vendus/database/database_helper.dart';
 import 'package:vendus/screens/login_screen.dart';
@@ -21,7 +22,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   User _user = User(userName: '', password: '', email: '', phoneNumber: '');
 
   // Create an instance of the DatabaseHelper class
-  final DatabaseHelper dbHelper = DatabaseHelper();
+  final DatabaseHelper dbHelper = DatabaseHelper(authService: AuthService());
 
   @override
   Widget build(BuildContext context) {

@@ -16,6 +16,15 @@ class User {
     this.role = "user",
   }) : id = Uuid().v4();
 
+  // Named constructor to create a User object from a map
+  User.fromMap(Map<String, dynamic> map)
+      : id = map['id'],
+        userName = map['userName'],
+        password = map['password'],
+        email = map['email'],
+        phoneNumber = map['phoneNumber'],
+        role = map['role'];
+
   // Define the toMap method to convert User to a Map
   Map<String, dynamic> toMap() {
     return {

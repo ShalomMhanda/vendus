@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vendus/database/auth_service.dart';
+import 'package:vendus/database/database_helper.dart';
 import 'package:vendus/main.dart';
 import 'package:vendus/app_theme.dart';
 import 'package:vendus/main_screens.dart';
 import 'package:vendus/models/product.dart';
+import 'package:vendus/models/user.dart';
 
 class ProductForm extends StatefulWidget {
   @override
@@ -13,6 +16,10 @@ class ProductForm extends StatefulWidget {
 
 class _ProductFormState extends State<ProductForm> {
   final _formKey = GlobalKey<FormState>();
+  final _productNameController = TextEditingController();
+  final _quantityController = TextEditingController();
+  final _costController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
   // Define variablesore form data
   Product _product = Product(
@@ -21,6 +28,7 @@ class _ProductFormState extends State<ProductForm> {
     quantity: 0.0,
     cost: 0.0,
     dateOfPurchase: DateTime.now(),
+    userId: '',
   );
 
   List<String> measurementUnits = [
@@ -31,6 +39,9 @@ class _ProductFormState extends State<ProductForm> {
     'count'
   ];
   String selectedMeasurementUnit = 'kg'; // Set an initial default value
+
+  // Create an instance of the DatabaseHelper class
+  final DatabaseHelper dbHelper = DatabaseHelper(authService: AuthService());
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +65,14 @@ class _ProductFormState extends State<ProductForm> {
           child: ListView(
             children: [
               TextFormField(
+                controller: _productNameController,
                 decoration: InputDecoration(labelText: 'Product Name'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
                   _product.productName = value!;
                 },
@@ -81,6 +99,7 @@ class _ProductFormState extends State<ProductForm> {
                 ],
               ),
               TextFormField(
+                controller: _quantityController,
                 decoration:
                     InputDecoration(labelText: 'Quantity', hintText: '0'),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -95,6 +114,7 @@ class _ProductFormState extends State<ProductForm> {
                 },
               ),
               TextFormField(
+                controller: _costController,
                 decoration:
                     InputDecoration(labelText: 'Cost', hintText: '0.00'),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -109,7 +129,6 @@ class _ProductFormState extends State<ProductForm> {
                 },
               ),
               SizedBox(height: 16.0), // Add more vertical spacing
-
               ElevatedButton(
                 onPressed: () {
                   showDatePicker(
@@ -128,7 +147,15 @@ class _ProductFormState extends State<ProductForm> {
                 child: Text("Select Date"),
               ),
               TextFormField(
+                controller: _descriptionController,
                 decoration: InputDecoration(labelText: 'Description'),
+                maxLines: 3,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
                   _product.description = value!;
                 },
@@ -138,20 +165,40 @@ class _ProductFormState extends State<ProductForm> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 60),
                   child: ElevatedButton.icon(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        // Process data.
-                        _formKey.currentState!.save();
-                        // Store form data in Product object.
-                        Product product = Product(
-                          productName: _product.productName,
-                          unitOfMeasurement: _product.unitOfMeasurement,
-                          quantity: _product.quantity,
-                          cost: _product.cost,
-                          dateOfPurchase: _product.dateOfPurchase,
-                          description: _product.description,
-                        );
-                        print(product);
+                        await dbHelper.printDatabasePath();
+
+                        try {
+                          // Save product to the database
+                          final product = Product(
+                            productName: _productNameController.text,
+                            quantity: double.parse(_quantityController.text),
+                            cost: double.parse(_costController.text),
+                            unitOfMeasurement: _product.unitOfMeasurement,
+                            dateOfPurchase: _product.dateOfPurchase,
+                            description: _descriptionController.text,
+                            userId: '',
+                          );
+                          await dbHelper.insertProduct(product);
+
+                          print('bcsdbcsdcbsdcnscsdjhcsdh');
+                          print(product.productName);
+
+                          // Display success message
+                          _showSnackBar('Product added successfully');
+
+                          // Navigate to the home page
+                          // ignore: use_build_context_synchronously
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyHomePage()),
+                          );
+                        } catch (e) {
+                          _showSnackBar('Product was not added successfully');
+                          print('Error inserting product: $e');
+                        }
                       }
                     },
                     icon: Icon(Icons.save),
@@ -163,12 +210,65 @@ class _ProductFormState extends State<ProductForm> {
                     ),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: myTheme.colorScheme.primary),
-                  )),
+                  )
+
+                  // child: ElevatedButton.icon(
+                  //   onPressed: () async {
+                  //     if (_formKey.currentState!.validate()) {
+                  //       await dbHelper.printDatabasePath();
+
+                  //       try {
+                  //         // Save user to the database
+                  //         print('Before trying to save');
+                  //         await dbHelper.insertProduct(_product);
+                  //         print('After trying to save');
+                  //         // Display success message
+                  //         _showSnackBar('Product added successfully');
+                  //         // ignore: use_build_context_synchronously
+                  //         Navigator.pushReplacement(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //               builder: (context) => MyHomePage()),
+                  //         );
+                  //       } catch (e) {
+                  //         _showSnackBar('Product was not added successfully');
+                  //         print('Error inserting user: $e');
+                  //       }
+                  //       // Process data.
+                  //       // _formKey.currentState!.save();
+                  //       // // Store form data in Product object.
+                  //       // Product product = Product(
+                  //       //   productName: _product.productName,
+                  //       //   unitOfMeasurement: _product.unitOfMeasurement,
+                  //       //   quantity: _product.quantity,
+                  //       //   cost: _product.cost,
+                  //       //   dateOfPurchase: _product.dateOfPurchase,
+                  //       //   description: _product.description,
+                  //       // );
+                  //       // print(product);
+                  //     }
+                  //   },
+                  //   icon: Icon(Icons.save),
+                  //   label: Text(
+                  //     'Save Product',
+                  //     style: TextStyle(
+                  //         color: myTheme.colorScheme.onPrimary, fontSize: 20),
+                  //     textAlign: TextAlign.center,
+                  //   ),
+                  //   style: ElevatedButton.styleFrom(
+                  //       backgroundColor: myTheme.colorScheme.primary),
+                  // )
+                  ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _showSnackBar(String message) {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
 

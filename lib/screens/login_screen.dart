@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vendus/app_theme.dart';
+import 'package:vendus/database/auth_service.dart';
 import 'package:vendus/main_screens.dart';
 import 'package:vendus/database/database_helper.dart';
 
@@ -15,7 +16,7 @@ class _LoginFormState extends State<LoginForm> {
   final _passwordController = TextEditingController();
 
   // Create an instance of the DatabaseHelper class
-  final DatabaseHelper dbHelper = DatabaseHelper();
+  final DatabaseHelper dbHelper = DatabaseHelper(authService: AuthService());
 
   @override
   Widget build(BuildContext context) {

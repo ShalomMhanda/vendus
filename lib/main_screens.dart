@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vendus/financial_analysis_screens.dart';
 import 'package:vendus/main.dart';
 import 'package:vendus/app_theme.dart';
-import 'package:vendus/inventory_screens.dart';
+import 'package:vendus/screens/inventory_screens.dart';
 import 'package:vendus/sales_screens.dart';
 import 'package:vendus/expense_screens.dart';
 
