@@ -3,9 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:vendus/financial_analysis_screens.dart';
 import 'package:vendus/main.dart';
 import 'package:vendus/app_theme.dart';
+import 'package:vendus/screens/expense_list.dart';
 import 'package:vendus/screens/inventory_screens.dart';
 import 'package:vendus/sales_screens.dart';
-import 'package:vendus/expense_screens.dart';
+import 'package:vendus/screens/expense_screens.dart';
 import 'package:vendus/screens/product_list.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -535,7 +536,7 @@ class ExpenseManagementPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ViewExpensesPage()),
+                                builder: (context) => ExpenseListPage()),
                           );
                         },
                       ),

@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:vendus/main.dart';
 import 'package:vendus/app_theme.dart';
 import 'package:vendus/main_screens.dart';
+import 'package:vendus/models/expense.dart';
+import 'package:vendus/database/database_helper.dart';
+import 'package:vendus/database/auth_service.dart';
 
 class ExpensesForm extends StatefulWidget {
   @override
@@ -12,11 +15,21 @@ class ExpensesForm extends StatefulWidget {
 
 class _ExpensesFormState extends State<ExpensesForm> {
   final _formKey = GlobalKey<FormState>();
+  final _costController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
-  // Define variables to store form data
-  String description = '';
-  double cost = 0.0;
-  DateTime? expenseDate;
+  Expense _expense = Expense(
+    expenseCategory: "",
+    cost: 0.0,
+    expenseDate: DateTime.now(),
+    description: '',
+    userId: '',
+  );
+
+  // // Define variables to store form data
+  // String description = '';
+  // double cost = 0.0;
+  // DateTime? expenseDate;
   List<String> expenseCategory = [
     'Transport',
     'Food',
@@ -25,6 +38,9 @@ class _ExpensesFormState extends State<ExpensesForm> {
     'Others'
   ];
   String selectedExpenseCategory = 'Transport'; // Set an initial default value
+
+  // Create an instance of the DatabaseHelper class
+  final DatabaseHelper dbHelper = DatabaseHelper(authService: AuthService());
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +64,18 @@ class _ExpensesFormState extends State<ExpensesForm> {
           child: ListView(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Description'),
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                    labelText: 'Description',
+                    labelStyle: TextStyle(fontSize: 20)),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
-                  description = value!;
+                  _expense.description = value!;
                 },
               ),
               SizedBox(height: 16.0), // Add more vertical spacing
@@ -62,6 +87,7 @@ class _ExpensesFormState extends State<ExpensesForm> {
                     onChanged: (String? newValue) {
                       setState(() {
                         selectedExpenseCategory = newValue!;
+                        _expense.expenseCategory = newValue;
                       });
                     },
                     items: expenseCategory
@@ -75,10 +101,20 @@ class _ExpensesFormState extends State<ExpensesForm> {
                 ],
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Cost'),
-                keyboardType: TextInputType.number,
+                controller: _costController,
+                decoration: InputDecoration(
+                    labelText: 'Cost',
+                    hintText: '0.00',
+                    labelStyle: TextStyle(fontSize: 20)),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter the cost';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
-                  cost = double.parse(value!);
+                  _expense.cost = double.parse(value!);
                 },
               ),
               SizedBox(height: 16.0), // Add more vertical spacing
@@ -92,14 +128,12 @@ class _ExpensesFormState extends State<ExpensesForm> {
                   ).then((pickedDate) {
                     if (pickedDate != null) {
                       setState(() {
-                        expenseDate = pickedDate;
+                        _expense.expenseDate = pickedDate;
                       });
                     }
                   });
                 },
-                child: Text(expenseDate != null
-                    ? 'Selected Date: ${expenseDate!.toLocal()}'
-                    : 'Select Expense Date'),
+                child: Text('Select Date'),
               ),
               SizedBox(height: 16.0), // Add more vertical spacing
               ElevatedButton(
@@ -108,10 +142,35 @@ class _ExpensesFormState extends State<ExpensesForm> {
                       myTheme.colorScheme.primary, // Set the background colo
                   padding: EdgeInsets.all(20.0), // Increase button size
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    // Save form data to database or perform other actions.
+                    await dbHelper.printDatabasePath();
+                    try {
+                      // Save expense to the database
+                      final expense = Expense(
+                        expenseCategory: _expense.expenseCategory,
+                        cost: double.parse(_costController.text),
+                        expenseDate: _expense.expenseDate,
+                        description: _descriptionController.text,
+                        userId: '',
+                      );
+                      // Save form data to database or perform other actions.
+                      print(expense.expenseCategory);
+                      await dbHelper.insertExpense(expense);
+
+                      // Display success message
+                      _showSnackBar('Expense recorded successfully');
+
+                      // Navigate to the home page
+                      // ignore: use_build_context_synchronously
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyHomePage()),
+                      );
+                    } catch (e) {
+                      _showSnackBar('Expense was not recorded successfully');
+                      print('Error inserting expenset: $e');
+                    }
                   }
                 },
                 child: Text(
@@ -127,6 +186,11 @@ class _ExpensesFormState extends State<ExpensesForm> {
         ),
       ),
     );
+  }
+
+  void _showSnackBar(String message) {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
 

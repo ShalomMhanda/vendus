@@ -85,7 +85,8 @@ class _ProductFormState extends State<ProductForm> {
                     value: selectedMeasurementUnit,
                     onChanged: (String? newValue) {
                       setState(() {
-                        _product.unitOfMeasurement = newValue!;
+                        selectedMeasurementUnit = newValue!;
+                        _product.unitOfMeasurement = newValue;
                       });
                     },
                     items: measurementUnits

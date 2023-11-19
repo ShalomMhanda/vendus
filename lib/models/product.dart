@@ -30,19 +30,6 @@ class Product {
         description = map['description'],
         userId = map['userId'] ?? '';
 
-  // factory Product.fromMap(Map<String, dynamic> map) {
-  //   return Product(
-  //     id =  map['id'],
-  //     productName =  map['productName'],
-  //     unitOfMeasurement: map['unitOfMeasurement'],
-  //     quantity: map['quantity'],
-  //     cost: map['cost'],
-  //     dateOfPurchase: DateTime.parse(map['dateOfPurchase']),
-  //     description: map['description'],
-  //     userId: map['userId'] ?? '',
-  //   );
-  // }
-
   Map<String, dynamic> toMap() {
     return {
       'id': id,
