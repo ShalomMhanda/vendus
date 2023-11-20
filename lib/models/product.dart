@@ -1,4 +1,6 @@
 import 'package:uuid/uuid.dart';
+import 'package:vendus/database/auth_service.dart';
+import 'package:vendus/database/database_helper.dart';
 
 class Product {
   String id;
@@ -42,5 +44,11 @@ class Product {
       'description': description,
       'userId': userId, // Add this field
     };
+  }
+
+  Future<void> updateProductInDatabase() async {
+    final db = await DatabaseHelper(authService: AuthService()).database;
+    await db.update('products', toMap(),
+        where: 'id = ?', whereArgs: [id]);
   }
 }

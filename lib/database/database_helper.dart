@@ -4,6 +4,7 @@ import 'package:vendus/models/expense.dart';
 import 'package:vendus/models/user.dart';
 import 'package:vendus/models/product.dart';
 import 'package:vendus/database/auth_service.dart';
+import 'package:vendus/models/sale.dart';
 
 class DatabaseHelper {
   static Database? _database;
@@ -24,12 +25,51 @@ class DatabaseHelper {
     return _database!;
   }
 
+  // Future<Database> initializeDatabase() async {
+  //   print('Gets to initalizeDatabase() function');
+  //   final String path = join(await getDatabasesPath(), 'vendus_database.db');
+  //   print("before calling createDatabase");
+  //   return await openDatabase(path, version: 8, onCreate: _createDatabase);
+  // }
+
   Future<Database> initializeDatabase() async {
-    print('Gets to initalizeDatabase() function');
-    final String path = join(await getDatabasesPath(), 'vendus_database.db');
-    print("before calling createDatabase");
-    return await openDatabase(path, version: 6, onCreate: _createDatabase);
-  }
+  print('Gets to initalizeDatabase() function');
+  final String path = join(await getDatabasesPath(), 'vendus_database.db');
+  print("before calling createDatabase");
+  return await openDatabase(path, version: 8, onCreate: (db, version) async {
+    await _createDatabase(db, version);
+  }, onUpgrade: (db, oldVersion, newVersion) async {
+    // Add any additional tables here
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS expenses(
+        id TEXT PRIMARY KEY,
+        userId TEXT,  -- Foreign key referencing the user who owns the expense
+        expenseCategory TEXT,
+        cost REAL,
+        expenseDate TEXT,
+        description TEXT,
+        FOREIGN KEY (userId) REFERENCES users(id)
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS sales(
+        saleId TEXT PRIMARY KEY,
+        userId TEXT,  -- Foreign key referencing the user who owns the sale
+        productId TEXT, -- Foreign key referencing the product being sold
+        productName TEXT,
+        sellingPrice REAL,
+        quantitySold REAL,
+        unitOfMeasurement TEXT,
+        saleDate TEXT,
+        FOREIGN KEY (userId) REFERENCES users(id)
+        FOREIGN KEY (productId) REFERENCES products(id)
+      )
+    ''');
+    print('Table "sales" created successfully.');
+  });
+}
+
 
   Future<void> _createDatabase(Database db, int version) async {
     print("Gets to the createDatabase function");
@@ -75,6 +115,23 @@ class DatabaseHelper {
       )
     ''');
     print('Table "expenses" created successfully.');
+
+    // Create the 'sales' table
+    await db.execute('''
+      CREATE TABLE sales(
+        saleId TEXT PRIMARY KEY,
+        userId TEXT,  -- Foreign key referencing the user who owns the sale
+        productId TEXT, -- Foreign key referencing the product being sold
+        productName TEXT,
+        sellingPrice REAL,
+        quantitySold REAL,
+        unitOfMeasurement TEXT,
+        saleDate TEXT,
+        FOREIGN KEY (userId) REFERENCES users(id)
+        FOREIGN KEY (productId) REFERENCES products(id)
+      )
+    ''');
+    print('Table "sales" created successfully.');
   }
 
   Future<void> insertProduct(Product product) async {
@@ -177,6 +234,18 @@ class DatabaseHelper {
     return products;
   }
 
+  Future<List<Sale>> getSales() async {
+    final db = await database;
+    final result = await db.query('sales');
+    final sales = result.map((json) => Sale.fromMap(json)).toList();
+
+    // Print the product IDs retrieved from the database
+    final saleIds = sales.map((sale) => sale.saleId).toList();
+    print('Sale IDs in the database: $saleIds');
+
+    return sales;
+  }
+
   Future<List<Expense>> getExpenses() async {
     final db = await database;
     final result = await db.query('expenses');
@@ -197,6 +266,17 @@ class DatabaseHelper {
       print('Product deleted successfully');
     } catch (e) {
       print('Error deleting product: $e');
+    }
+  }
+
+  Future<void> deleteSale(String saleId) async {
+    try {
+      final db = await database;
+      print('Deleting sale with ID: $saleId');
+      await db.delete('sales', where: 'saleId = ?', whereArgs: [saleId]);
+      print('Sale record deleted successfully');
+    } catch (e) {
+      print('Error deleting sale record: $e');
     }
   }
 }

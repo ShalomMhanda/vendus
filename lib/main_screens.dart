@@ -8,6 +8,8 @@ import 'package:vendus/screens/inventory_screens.dart';
 import 'package:vendus/sales_screens.dart';
 import 'package:vendus/screens/expense_screens.dart';
 import 'package:vendus/screens/product_list.dart';
+import 'package:vendus/screens/sales_list.dart';
+import 'package:vendus/screens/sales_page.dart';
 
 class MyHomePage extends StatelessWidget {
   @override
@@ -359,7 +361,7 @@ class SalesManagementPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SalesForm()),
+                                builder: (context) => SalesPage()),
                           );
                         },
                       ),
@@ -385,7 +387,7 @@ class SalesManagementPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ViewSalesPage()),
+                                builder: (context) => SalesListPage()),
                           );
                         },
                       ),
