@@ -5,6 +5,7 @@ import 'package:vendus/models/user.dart';
 import 'package:vendus/models/product.dart';
 import 'package:vendus/database/auth_service.dart';
 import 'package:vendus/models/sale.dart';
+import 'package:vendus/models/profit.dart';
 
 class DatabaseHelper {
   static Database? _database;
@@ -33,14 +34,14 @@ class DatabaseHelper {
   // }
 
   Future<Database> initializeDatabase() async {
-  print('Gets to initalizeDatabase() function');
-  final String path = join(await getDatabasesPath(), 'vendus_database.db');
-  print("before calling createDatabase");
-  return await openDatabase(path, version: 8, onCreate: (db, version) async {
-    await _createDatabase(db, version);
-  }, onUpgrade: (db, oldVersion, newVersion) async {
-    // Add any additional tables here
-    await db.execute('''
+    print('Gets to initalizeDatabase() function');
+    final String path = join(await getDatabasesPath(), 'vendus_database.db');
+    print("before calling createDatabase");
+    return await openDatabase(path, version: 8, onCreate: (db, version) async {
+      await _createDatabase(db, version);
+    }, onUpgrade: (db, oldVersion, newVersion) async {
+      // Add any additional tables here
+      await db.execute('''
       CREATE TABLE IF NOT EXISTS expenses(
         id TEXT PRIMARY KEY,
         userId TEXT,  -- Foreign key referencing the user who owns the expense
@@ -52,7 +53,7 @@ class DatabaseHelper {
       )
     ''');
 
-    await db.execute('''
+      await db.execute('''
       CREATE TABLE IF NOT EXISTS sales(
         saleId TEXT PRIMARY KEY,
         userId TEXT,  -- Foreign key referencing the user who owns the sale
@@ -66,10 +67,9 @@ class DatabaseHelper {
         FOREIGN KEY (productId) REFERENCES products(id)
       )
     ''');
-    print('Table "sales" created successfully.');
-  });
-}
-
+      print('Table "sales" created successfully.');
+    });
+  }
 
   Future<void> _createDatabase(Database db, int version) async {
     print("Gets to the createDatabase function");
@@ -277,6 +277,104 @@ class DatabaseHelper {
       print('Sale record deleted successfully');
     } catch (e) {
       print('Error deleting sale record: $e');
+    }
+  }
+
+  // Future<Profit> calculateProfit(DateTime startDate, DateTime endDate) async {
+  //   final db = await DatabaseHelper(authService: AuthService()).database;
+
+  //   // Calculate total sales
+  //   final salesResult = await db.rawQuery('''
+  //     SELECT SUM(sellingPrice) AS totalSales
+  //     FROM sales
+  //     WHERE saleDate BETWEEN ? AND ?
+  //   ''', [startDate.toIso8601String(), endDate.toIso8601String()]);
+
+  //   final totalSales = (salesResult.first['totalSales'] as double?) ?? 0.0;
+
+  //   // Calculate total expenses
+  //   final expensesResult = await db.rawQuery('''
+  //     SELECT SUM(cost) AS totalExpenses
+  //     FROM expenses
+  //     WHERE expenseDate BETWEEN ? AND ?
+  //   ''', [startDate.toIso8601String(), endDate.toIso8601String()]);
+
+  //   final totalExpenses =
+  //       (expensesResult.first['totalExpenses'] as double?) ?? 0.0;
+
+  //   // Calculate total product costs
+  //   final productCostsResult = await db.rawQuery('''
+  //     SELECT SUM(cost) AS totalProductCosts
+  //     FROM products
+  //     WHERE dateOfPurchase BETWEEN ? AND ?
+  //   ''', [startDate.toIso8601String(), endDate.toIso8601String()]);
+
+  //   final totalProductCosts =
+  //       (productCostsResult.first['totalProductCosts'] as double?) ?? 0.0;
+
+  //   // Calculate profit
+  //   final calculatedProfit = totalSales - totalExpenses - totalProductCosts;
+
+  //   return Profit(
+  //     sellingPrice: totalSales,
+  //     totalExpenses: totalExpenses,
+  //     totalProductCosts: totalProductCosts,
+  //     calculatedProfit: calculatedProfit,
+  //   );
+  // }
+
+  Future<Profit> calculateProfit(DateTime startDate, DateTime endDate) async {
+    final db = await DatabaseHelper(authService: AuthService()).database;
+
+    try {
+      // Calculate total sales
+      final salesResult = await db.rawQuery('''
+      SELECT SUM(sellingPrice * quantitySold) AS totalSales
+      FROM sales
+      WHERE saleDate BETWEEN ? AND ?
+    ''', [startDate.toIso8601String(), endDate.toIso8601String()]);
+
+      final totalSales = (salesResult.first['totalSales'] as double?) ?? 0.0;
+      print('Total Sales: $totalSales');
+
+      // Calculate total expenses
+      final expensesResult = await db.rawQuery('''
+      SELECT SUM(cost) AS totalExpenses
+      FROM expenses
+      WHERE expenseDate BETWEEN ? AND ?
+    ''', [startDate.toIso8601String(), endDate.toIso8601String()]);
+
+      final totalExpenses =
+          (expensesResult.first['totalExpenses'] as double?) ?? 0.0;
+
+      // Calculate total product costs
+      final productCostsResult = await db.rawQuery('''
+      SELECT SUM(cost) AS totalProductCosts
+      FROM products
+      WHERE dateOfPurchase BETWEEN ? AND ?
+    ''', [startDate.toIso8601String(), endDate.toIso8601String()]);
+
+      final totalProductCosts =
+          (productCostsResult.first['totalProductCosts'] as double?) ?? 0.0;
+
+      // Calculate profit
+      final calculatedProfit = totalSales - totalExpenses - totalProductCosts;
+      print('Calculated Profit: $calculatedProfit');
+
+      return Profit(
+        sellingPrice: totalSales,
+        totalExpenses: totalExpenses,
+        totalProductCosts: totalProductCosts,
+        calculatedProfit: calculatedProfit,
+      );
+    } catch (e) {
+      print('Error calculating profit: $e');
+      return Profit(
+        sellingPrice: 0.0,
+        totalExpenses: 0.0,
+        totalProductCosts: 0.0,
+        calculatedProfit: 0.0,
+      );
     }
   }
 }

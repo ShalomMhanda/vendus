@@ -8,6 +8,7 @@ import 'package:vendus/screens/inventory_screens.dart';
 import 'package:vendus/sales_screens.dart';
 import 'package:vendus/screens/expense_screens.dart';
 import 'package:vendus/screens/product_list.dart';
+import 'package:vendus/screens/profit.dart';
 import 'package:vendus/screens/sales_list.dart';
 import 'package:vendus/screens/sales_page.dart';
 
@@ -655,7 +656,7 @@ class FinancialAnalysisPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CalculateProfitPage()),
+                            builder: (context) => ProfitPage()),
                       );
                     },
                   ),
