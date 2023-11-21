@@ -26,13 +26,6 @@ class DatabaseHelper {
     return _database!;
   }
 
-  // Future<Database> initializeDatabase() async {
-  //   print('Gets to initalizeDatabase() function');
-  //   final String path = join(await getDatabasesPath(), 'vendus_database.db');
-  //   print("before calling createDatabase");
-  //   return await openDatabase(path, version: 8, onCreate: _createDatabase);
-  // }
-
   Future<Database> initializeDatabase() async {
     print('Gets to initalizeDatabase() function');
     final String path = join(await getDatabasesPath(), 'vendus_database.db');
@@ -280,49 +273,6 @@ class DatabaseHelper {
     }
   }
 
-  // Future<Profit> calculateProfit(DateTime startDate, DateTime endDate) async {
-  //   final db = await DatabaseHelper(authService: AuthService()).database;
-
-  //   // Calculate total sales
-  //   final salesResult = await db.rawQuery('''
-  //     SELECT SUM(sellingPrice) AS totalSales
-  //     FROM sales
-  //     WHERE saleDate BETWEEN ? AND ?
-  //   ''', [startDate.toIso8601String(), endDate.toIso8601String()]);
-
-  //   final totalSales = (salesResult.first['totalSales'] as double?) ?? 0.0;
-
-  //   // Calculate total expenses
-  //   final expensesResult = await db.rawQuery('''
-  //     SELECT SUM(cost) AS totalExpenses
-  //     FROM expenses
-  //     WHERE expenseDate BETWEEN ? AND ?
-  //   ''', [startDate.toIso8601String(), endDate.toIso8601String()]);
-
-  //   final totalExpenses =
-  //       (expensesResult.first['totalExpenses'] as double?) ?? 0.0;
-
-  //   // Calculate total product costs
-  //   final productCostsResult = await db.rawQuery('''
-  //     SELECT SUM(cost) AS totalProductCosts
-  //     FROM products
-  //     WHERE dateOfPurchase BETWEEN ? AND ?
-  //   ''', [startDate.toIso8601String(), endDate.toIso8601String()]);
-
-  //   final totalProductCosts =
-  //       (productCostsResult.first['totalProductCosts'] as double?) ?? 0.0;
-
-  //   // Calculate profit
-  //   final calculatedProfit = totalSales - totalExpenses - totalProductCosts;
-
-  //   return Profit(
-  //     sellingPrice: totalSales,
-  //     totalExpenses: totalExpenses,
-  //     totalProductCosts: totalProductCosts,
-  //     calculatedProfit: calculatedProfit,
-  //   );
-  // }
-
   Future<Profit> calculateProfit(DateTime startDate, DateTime endDate) async {
     final db = await DatabaseHelper(authService: AuthService()).database;
 
@@ -379,9 +329,24 @@ class DatabaseHelper {
   }
 
   Future<void> updateProductInDatabase(Product product) async {
-  final db = await database;
-  await db.update('products', product.toMap(),
-      where: 'id = ?', whereArgs: [product.id]);
-}
+    final db = await database;
+    await db.update('products', product.toMap(),
+        where: 'id = ?', whereArgs: [product.id]);
+  }
 
+  // Future<void> updateSaleInDatabase(Sale sale) async {
+  // final db = await database;
+  // await db.update('sales', sale.toMap(),
+  //     where: 'id = ?', whereArgs: [sale.saleId]);
+  // }
+
+  Future<void> updateSaleInDatabase(Sale sale) async {
+    final db = await database;
+    await db.update(
+      'sales',
+      sale.toMap(),
+      where: 'saleId = ?', // Use 'saleId' instead of 'id'
+      whereArgs: [sale.saleId],
+    );
+  }
 }

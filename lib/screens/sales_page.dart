@@ -3,6 +3,7 @@ import 'package:vendus/models/product.dart';
 import 'package:vendus/database/database_helper.dart';
 import 'package:vendus/database/auth_service.dart';
 import 'package:vendus/screens/sales_form.dart';
+import 'package:vendus/app_theme.dart';
 
 class SalesPage extends StatefulWidget {
   @override
@@ -31,7 +32,11 @@ class _SalesPageState extends State<SalesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sales Page'),
+        backgroundColor: myTheme.colorScheme.secondary,
+        title: Text(
+          'Products List',
+          style: TextStyle(color: myTheme.colorScheme.onSecondary),
+        ),
       ),
       body: Column(
         children: [
@@ -72,7 +77,13 @@ class _SalesPageState extends State<SalesPage> {
                         ),
                       );
                     },
-                    child: Text('Sale'),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: myTheme.colorScheme.primary),
+                    child: Text(
+                      'Sell',
+                      style: TextStyle(color: myTheme.colorScheme.onPrimary),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 );
               },

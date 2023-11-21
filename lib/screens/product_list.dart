@@ -132,11 +132,6 @@ class _ProductListPageState extends State<ProductListPage> {
                             IconButton(
                               icon: Icon(Icons.delete),
                               onPressed: () async {
-                                // print('Deleting product: ${product.id}');
-                                // print(await getDatabasesPath());
-                                // await dbHelper.deleteProduct(product.id);
-                                // print('Deleted successfully');
-                                // setState(() {});
                                 _confirmDelete(product);
                               },
                             ),

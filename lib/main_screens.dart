@@ -414,7 +414,7 @@ class SalesManagementPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EditSalePage()),
+                                builder: (context) => SalesListPage()),
                           );
                         },
                       ),
@@ -439,7 +439,7 @@ class SalesManagementPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DeleteSalePage()),
+                                builder: (context) => SalesListPage()),
                           );
                         },
                       ),
