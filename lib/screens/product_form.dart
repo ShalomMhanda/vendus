@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:vendus/database/auth_service.dart';
 import 'package:vendus/database/database_helper.dart';
-import 'package:vendus/main.dart';
 import 'package:vendus/app_theme.dart';
 import 'package:vendus/main_screens.dart';
 import 'package:vendus/models/product.dart';
-import 'package:vendus/models/user.dart';
 
 class ProductForm extends StatefulWidget {
   @override
@@ -66,7 +63,9 @@ class _ProductFormState extends State<ProductForm> {
             children: [
               TextFormField(
                 controller: _productNameController,
-                decoration: InputDecoration(labelText: 'Product Name'),
+                decoration: InputDecoration(
+                    labelText: 'Product Name',
+                    labelStyle: TextStyle(fontSize: 22)),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter some text';
@@ -80,7 +79,7 @@ class _ProductFormState extends State<ProductForm> {
               SizedBox(height: 16.0), // Add more vertical spacing
               Row(
                 children: [
-                  Text('Unit of Measurement: '),
+                  Text('Unit of Measurement: ', style: TextStyle(fontSize: 16)),
                   DropdownButton<String>(
                     value: selectedMeasurementUnit,
                     onChanged: (String? newValue) {
@@ -101,8 +100,10 @@ class _ProductFormState extends State<ProductForm> {
               ),
               TextFormField(
                 controller: _quantityController,
-                decoration:
-                    InputDecoration(labelText: 'Quantity', hintText: '0'),
+                decoration: InputDecoration(
+                    labelText: 'Quantity',
+                    hintText: '0',
+                    labelStyle: TextStyle(fontSize: 22)),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -116,8 +117,10 @@ class _ProductFormState extends State<ProductForm> {
               ),
               TextFormField(
                 controller: _costController,
-                decoration:
-                    InputDecoration(labelText: 'Cost', hintText: '0.00'),
+                decoration: InputDecoration(
+                    labelText: 'Cost',
+                    hintText: '0.00',
+                    labelStyle: TextStyle(fontSize: 22)),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -149,7 +152,9 @@ class _ProductFormState extends State<ProductForm> {
               ),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: InputDecoration(
+                    labelText: 'Description',
+                    labelStyle: TextStyle(fontSize: 22)),
                 maxLines: 3,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -182,10 +187,6 @@ class _ProductFormState extends State<ProductForm> {
                             userId: '',
                           );
                           await dbHelper.insertProduct(product);
-
-                          print('bcsdbcsdcbsdcnscsdjhcsdh');
-                          print(product.productName);
-                          print(product.id);
 
                           // Display success message
                           _showSnackBar('Product added successfully');
@@ -223,83 +224,5 @@ class _ProductFormState extends State<ProductForm> {
   void _showSnackBar(String message) {
     final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-}
-
-class DiscardProductPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    // var pair = appState.current;
-
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            MyLogo(),
-            Text(
-              'Discard Product',
-              style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight:
-                      FontWeight.bold), // Change the font size to 24 pixels
-            ),
-            MyBottomNavigationBar(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ViewInventoryPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    // var pair = appState.current;
-
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            MyLogo(),
-            Text(
-              'View Inventory',
-              style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight:
-                      FontWeight.bold), // Change the font size to 24 pixels
-            ),
-            MyBottomNavigationBar(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class EditProductPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    // var pair = appState.current;
-
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            MyLogo(),
-            Text(
-              'Edit Product',
-              style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight:
-                      FontWeight.bold), // Change the font size to 24 pixels
-            ),
-            MyBottomNavigationBar(),
-          ],
-        ),
-      ),
-    );
   }
 }

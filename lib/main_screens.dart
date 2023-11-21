@@ -4,7 +4,7 @@ import 'package:vendus/financial_analysis_screens.dart';
 import 'package:vendus/main.dart';
 import 'package:vendus/app_theme.dart';
 import 'package:vendus/screens/expense_list.dart';
-import 'package:vendus/screens/inventory_screens.dart';
+import 'package:vendus/screens/product_form.dart';
 import 'package:vendus/sales_screens.dart';
 import 'package:vendus/screens/expense_screens.dart';
 import 'package:vendus/screens/product_list.dart';
@@ -263,7 +263,7 @@ class InventoryManagementPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EditProductPage()),
+                                builder: (context) => ProductListPage()),
                           );
                         },
                       ),
@@ -288,7 +288,7 @@ class InventoryManagementPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DiscardProductPage()),
+                                builder: (context) => ProductListPage()),
                           );
                         },
                       ),

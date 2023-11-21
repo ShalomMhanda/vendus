@@ -63,14 +63,21 @@ class _EditProductPageState extends State<EditProductPage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(
+          top: 60.0,
+          right: 30.0,
+          left: 30.0,
+          bottom: 30.0,
+        ),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
               TextFormField(
                 controller: _productNameController,
-                decoration: InputDecoration(labelText: 'Product Name'),
+                decoration: InputDecoration(
+                    labelText: 'Product Name',
+                    labelStyle: TextStyle(fontSize: 22)),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter some text';
@@ -84,7 +91,7 @@ class _EditProductPageState extends State<EditProductPage> {
               SizedBox(height: 16.0), // Add more vertical spacing
               Row(
                 children: [
-                  Text('Unit of Measurement: '),
+                  Text('Unit of Measurement: ', style: TextStyle(fontSize: 16)),
                   DropdownButton<String>(
                     value: selectedMeasurementUnit,
                     onChanged: (String? newValue) {
@@ -105,8 +112,10 @@ class _EditProductPageState extends State<EditProductPage> {
               ),
               TextFormField(
                 controller: _quantityController,
-                decoration:
-                    InputDecoration(labelText: 'Quantity', hintText: '0'),
+                decoration: InputDecoration(
+                    labelText: 'Quantity',
+                    hintText: '0',
+                    labelStyle: TextStyle(fontSize: 22)),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -120,8 +129,10 @@ class _EditProductPageState extends State<EditProductPage> {
               ),
               TextFormField(
                 controller: _costController,
-                decoration:
-                    InputDecoration(labelText: 'Cost', hintText: '0.00'),
+                decoration: InputDecoration(
+                    labelText: 'Cost',
+                    hintText: '0.00',
+                    labelStyle: TextStyle(fontSize: 22)),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -153,7 +164,9 @@ class _EditProductPageState extends State<EditProductPage> {
               ),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: InputDecoration(
+                    labelText: 'Description',
+                    labelStyle: TextStyle(fontSize: 22)),
                 maxLines: 3,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -188,7 +201,14 @@ class _EditProductPageState extends State<EditProductPage> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text('Update Product'),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: myTheme.colorScheme.primary),
+                child: Text(
+                  'Update Product',
+                  style: TextStyle(
+                      color: myTheme.colorScheme.onPrimary, fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),
