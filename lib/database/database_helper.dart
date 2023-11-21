@@ -273,6 +273,17 @@ class DatabaseHelper {
     }
   }
 
+  Future<void> deleteExpense(String id) async {
+    try {
+      final db = await database;
+      print('Deleting sale with ID: $id');
+      await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
+      print('Expense record deleted successfully');
+    } catch (e) {
+      print('Error deleting expense record: $e');
+    }
+  }
+
   Future<Profit> calculateProfit(DateTime startDate, DateTime endDate) async {
     final db = await DatabaseHelper(authService: AuthService()).database;
 
@@ -334,12 +345,6 @@ class DatabaseHelper {
         where: 'id = ?', whereArgs: [product.id]);
   }
 
-  // Future<void> updateSaleInDatabase(Sale sale) async {
-  // final db = await database;
-  // await db.update('sales', sale.toMap(),
-  //     where: 'id = ?', whereArgs: [sale.saleId]);
-  // }
-
   Future<void> updateSaleInDatabase(Sale sale) async {
     final db = await database;
     await db.update(
@@ -347,6 +352,16 @@ class DatabaseHelper {
       sale.toMap(),
       where: 'saleId = ?', // Use 'saleId' instead of 'id'
       whereArgs: [sale.saleId],
+    );
+  }
+
+  Future<void> updateExpenseInDatabase(Expense expense) async {
+    final db = await database;
+    await db.update(
+      'expenses',
+      expense.toMap(),
+      where: 'id = ?', // Use 'saleId' instead of 'id'
+      whereArgs: [expense.id],
     );
   }
 }

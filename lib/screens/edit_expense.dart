@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:vendus/main.dart';
-import 'package:vendus/app_theme.dart';
-import 'package:vendus/main_screens.dart';
 import 'package:vendus/models/expense.dart';
 import 'package:vendus/database/database_helper.dart';
 import 'package:vendus/database/auth_service.dart';
+import 'package:vendus/app_theme.dart';
 
-class ExpensesForm extends StatefulWidget {
+class EditExpensePage extends StatefulWidget {
+  final Expense expense;
+
+  EditExpensePage({required this.expense});
+
   @override
   // ignore: library_private_types_in_public_api
-  _ExpensesFormState createState() => _ExpensesFormState();
+  _EditExpensePageState createState() => _EditExpensePageState();
 }
 
-class _ExpensesFormState extends State<ExpensesForm> {
+class _EditExpensePageState extends State<EditExpensePage> {
   final _formKey = GlobalKey<FormState>();
   final _costController = TextEditingController();
   final _descriptionController = TextEditingController();
+
+  final DatabaseHelper dbHelper = DatabaseHelper(authService: AuthService());
 
   Expense _expense = Expense(
     expenseCategory: "",
     cost: 0.0,
     expenseDate: DateTime.now(),
-    description: '',
+    description: "",
     userId: '',
   );
 
@@ -35,8 +38,14 @@ class _ExpensesFormState extends State<ExpensesForm> {
   ];
   String selectedExpenseCategory = 'Transport'; // Set an initial default value
 
-  // Create an instance of the DatabaseHelper class
-  final DatabaseHelper dbHelper = DatabaseHelper(authService: AuthService());
+  @override
+  void initState() {
+    super.initState();
+
+    // Set initial values for form fields based on the product data
+    _costController.text = widget.expense.cost.toString();
+    _descriptionController.text = widget.expense.description;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +53,7 @@ class _ExpensesFormState extends State<ExpensesForm> {
       appBar: AppBar(
         backgroundColor: myTheme.colorScheme.secondary,
         title: Text(
-          'Record Expense',
+          'Edit Expense Record',
           style: TextStyle(color: myTheme.colorScheme.onSecondary),
         ),
       ),
@@ -63,7 +72,8 @@ class _ExpensesFormState extends State<ExpensesForm> {
                 controller: _descriptionController,
                 decoration: InputDecoration(
                     labelText: 'Description',
-                    labelStyle: TextStyle(fontSize: 20)),
+                    labelStyle: TextStyle(fontSize: 22)),
+                maxLines: 3,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter some text';
@@ -96,16 +106,17 @@ class _ExpensesFormState extends State<ExpensesForm> {
                   ),
                 ],
               ),
+              SizedBox(height: 16.0), // Add more vertical spacing
               TextFormField(
                 controller: _costController,
                 decoration: InputDecoration(
                     labelText: 'Cost',
                     hintText: '0.00',
-                    labelStyle: TextStyle(fontSize: 20)),
+                    labelStyle: TextStyle(fontSize: 22)),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter the cost';
+                    return 'Please enter some text';
                   }
                   return null;
                 },
@@ -129,52 +140,34 @@ class _ExpensesFormState extends State<ExpensesForm> {
                     }
                   });
                 },
-                child: Text('Select Date'),
+                child: Text("Select Date"),
               ),
-              SizedBox(height: 16.0), // Add more vertical spacing
+              SizedBox(height: 16.0),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      myTheme.colorScheme.primary, // Set the background colo
-                  padding: EdgeInsets.all(20.0), // Increase button size
-                ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    await dbHelper.printDatabasePath();
-                    try {
-                      // Save expense to the database
-                      final expense = Expense(
-                        expenseCategory: _expense.expenseCategory,
-                        cost: double.parse(_costController.text),
-                        expenseDate: _expense.expenseDate,
-                        description: _descriptionController.text,
-                        userId: '',
-                      );
-                      // Save form data to database or perform other actions.
-                      print(expense.expenseCategory);
-                      await dbHelper.insertExpense(expense);
+                    // Update expense logic
+                    widget.expense.description = _descriptionController.text;
+                    widget.expense.expenseCategory = _expense.expenseCategory;
+                    widget.expense.cost = double.parse(_costController.text);
+                    widget.expense.expenseDate = _expense.expenseDate;
 
-                      // Display success message
-                      _showSnackBar('Expense recorded successfully');
+                    await dbHelper.updateExpenseInDatabase(widget.expense);
 
-                      // Navigate to the home page
-                      // ignore: use_build_context_synchronously
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyHomePage()),
-                      );
-                    } catch (e) {
-                      _showSnackBar('Expense was not recorded successfully');
-                      print('Error inserting expenset: $e');
-                    }
+                    _showSnackBar('Expense updated successfully');
+
+                    // Navigate back to the product list page
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(context);
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: myTheme.colorScheme.primary),
                 child: Text(
-                  'Save',
+                  'Update Expense',
                   style: TextStyle(
-                    color: myTheme.colorScheme.onPrimary,
-                    fontSize: 20,
-                  ),
+                      color: myTheme.colorScheme.onPrimary, fontSize: 20),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ],

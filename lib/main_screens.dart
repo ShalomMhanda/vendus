@@ -5,7 +5,6 @@ import 'package:vendus/main.dart';
 import 'package:vendus/app_theme.dart';
 import 'package:vendus/screens/expense_list.dart';
 import 'package:vendus/screens/product_form.dart';
-import 'package:vendus/sales_screens.dart';
 import 'package:vendus/screens/expense_screens.dart';
 import 'package:vendus/screens/product_list.dart';
 import 'package:vendus/screens/profit.dart';
@@ -565,7 +564,7 @@ class ExpenseManagementPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EditExpensePage()),
+                                builder: (context) => ExpenseListPage()),
                           );
                         },
                       ),
@@ -590,7 +589,7 @@ class ExpenseManagementPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DeleteExpensePage()),
+                                builder: (context) => ExpenseListPage()),
                           );
                         },
                       ),

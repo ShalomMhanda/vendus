@@ -13,7 +13,7 @@ class SalesListPage extends StatefulWidget {
 
 class _SalesListPageState extends State<SalesListPage> {
   final dbHelper = DatabaseHelper(authService: AuthService());
-  List<Sale> _sales = []; // List of products to display
+  List<Sale> _sales = []; // List of expenses to display
   String _searchQuery = '';
 
   @override
@@ -87,7 +87,7 @@ class _SalesListPageState extends State<SalesListPage> {
                 });
               },
               decoration: InputDecoration(
-                hintText: 'Search products...',
+                hintText: 'Search sales...',
               ),
             ),
           ),
