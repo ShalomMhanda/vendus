@@ -11,6 +11,7 @@ import 'package:vendus/screens/product_list.dart';
 import 'package:vendus/screens/profit.dart';
 import 'package:vendus/screens/sales_list.dart';
 import 'package:vendus/screens/sales_page.dart';
+import 'package:vendus/screens/sales_trends.dart';
 
 class MyHomePage extends StatelessWidget {
   @override
@@ -655,8 +656,7 @@ class FinancialAnalysisPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfitPage()),
+                        MaterialPageRoute(builder: (context) => ProfitPage()),
                       );
                     },
                   ),
@@ -684,7 +684,7 @@ class FinancialAnalysisPage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => GenerateTrendGraphsPage()),
+                              builder: (context) => SalesTrendPage()),
                         );
                       },
                     ),

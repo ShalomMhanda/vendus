@@ -377,4 +377,11 @@ class DatabaseHelper {
       );
     }
   }
+
+  Future<void> updateProductInDatabase(Product product) async {
+  final db = await database;
+  await db.update('products', product.toMap(),
+      where: 'id = ?', whereArgs: [product.id]);
+}
+
 }

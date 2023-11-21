@@ -18,6 +18,8 @@ dependencies:
   sqflite: ^2.3.0
   path: ^1.8.3
   moor: ^4.6.1+1
+  fl_chart: ^0.36.0 # Check for the latest version on pub.dev
+
 
 
 dev_dependencies:
