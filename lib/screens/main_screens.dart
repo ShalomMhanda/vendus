@@ -5,7 +5,7 @@ import 'package:vendus/main.dart';
 import 'package:vendus/app_theme.dart';
 import 'package:vendus/screens/expense_list.dart';
 import 'package:vendus/screens/product_form.dart';
-import 'package:vendus/screens/expense_screens.dart';
+import 'package:vendus/screens/expense_form.dart';
 import 'package:vendus/screens/product_list.dart';
 import 'package:vendus/screens/profit.dart';
 import 'package:vendus/screens/sales_list.dart';

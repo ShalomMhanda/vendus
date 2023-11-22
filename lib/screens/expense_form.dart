@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:vendus/main.dart';
 import 'package:vendus/app_theme.dart';
-import 'package:vendus/main_screens.dart';
+import 'package:vendus/screens/main_screens.dart';
 import 'package:vendus/models/expense.dart';
 import 'package:vendus/database/database_helper.dart';
 import 'package:vendus/database/auth_service.dart';

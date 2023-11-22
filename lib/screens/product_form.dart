@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vendus/database/auth_service.dart';
 import 'package:vendus/database/database_helper.dart';
 import 'package:vendus/app_theme.dart';
-import 'package:vendus/main_screens.dart';
+import 'package:vendus/screens/main_screens.dart';
 import 'package:vendus/models/product.dart';
 
 class ProductForm extends StatefulWidget {

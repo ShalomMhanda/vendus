@@ -2,8 +2,8 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vendus/app_theme.dart';
-import 'package:vendus/main_screens.dart';
-import 'package:vendus/screens/registration_screen.dart';
+import 'package:vendus/screens/main_screens.dart';
+import 'package:vendus/screens/account_registration_form.dart';
 
 void main() {
   runApp(MyApp());
