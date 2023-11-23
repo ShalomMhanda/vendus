@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vendus/financial_analysis_screens.dart';
+import 'package:vendus/screens/financial_analysis_screens.dart';
 import 'package:vendus/main.dart';
 import 'package:vendus/app_theme.dart';
 import 'package:vendus/screens/expense_list.dart';
@@ -27,7 +27,7 @@ class MyHomePage extends StatelessWidget {
                 margin: EdgeInsets.only(
                     top: 32.0, left: 16.0, right: 16.0), // Adjust margins
                 child: SizedBox(
-                  height: 500, // Specify the desired height
+                  height: 580, // Specify the desired height
                   width: 375, // Specify the desired width
                   child: GridView.count(
                     crossAxisCount: 2,
@@ -698,7 +698,7 @@ class FinancialAnalysisPage extends StatelessWidget {
                       padding: EdgeInsets.all(30.0),
                     ),
                     child: Text(
-                      'Reporting',
+                      'Generate Reports',
                       style: TextStyle(
                         color:
                             myTheme.colorScheme.onPrimary, // Set the text color
